@@ -2,22 +2,20 @@ package tr.countdown;
 
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.swing.FontIcon;
-import raven.datetime.component.date.DatePicker;
-import raven.datetime.component.time.TimePicker;
 
 import javax.swing.*;
 import java.awt.event.*;
 
 public class MainApp extends JFrame{
+    private JPanel main_panel;
+    private JPanel add_panel;
+    private JLabel name_label;
     private JTextField name_textfield;
+    private JLabel date_label;
     private JTextField date_textfield;
     private JButton add_button;
-    private JLabel name_label;
-    private JLabel date_label;
-    private JPanel add_panel;
-    private JScrollPane scroll_pane;
     private JPanel show_panel;
-    private JPanel main_panel;
+    private JScrollPane scroll_pane;
 
     private boolean isEditing = false;
     private ShowPanel editingPanel = null;

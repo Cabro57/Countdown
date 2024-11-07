@@ -12,9 +12,16 @@ public class Countdowns {
 
         this.filePath = System.getProperty("user.home") + "\\AppData\\Roaming\\.countdown\\" + dosya_adi;
         File file = new File(filePath);
+
+        // Dosya mevcut değilse oluştur
         if (!file.exists()) {
-            file.getParentFile().mkdirs();
-            System.out.println("Dosya oluşturuldu!!!");
+            try {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+                System.out.println("Dosya oluşturuldu!!!");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -55,14 +62,9 @@ public class Countdowns {
     }
 
     public void updateCountdown(int id, String newName, String newDate) {
-        for (Countdown countdown : countdowns) {
-            if (countdown.getID() == id) {
-                countdown.setName(newName);
-                countdown.setDate(newDate);
-                break;
-            }
-        }
-
+        Countdown countdown = getCountdown(id);
+        countdown.setName(newName);
+        countdown.setDate(newDate);
     }
 
     public void load() {
