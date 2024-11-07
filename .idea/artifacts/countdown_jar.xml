@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="countdown:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/countdown_jar</output-path>
+    <root id="archive" name="countdown.jar">
+      <element id="module-output" name="countdown" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/kordamp/ikonli/ikonli-swing/2.6.0/ikonli-swing-2.6.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/kordamp/ikonli/ikonli-feather-pack/2.6.0/ikonli-feather-pack-2.6.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/kordamp/ikonli/ikonli-core/2.6.0/ikonli-core-2.6.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
