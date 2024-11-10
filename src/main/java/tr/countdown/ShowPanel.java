@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 
 public class ShowPanel {
     private MainApp app;
+
     private JButton close_button;
     private JButton edit_button;
     private JLabel name_label;
@@ -18,46 +19,50 @@ public class ShowPanel {
 
     private int ID;
 
-    public ShowPanel(int ID, Countdowns cds, MainApp app) {
+    private CountdownTimer timer;
+
+    private CountdownDatabase countdowns;
+    private Countdown countdown;
+
+    public ShowPanel(Countdown countdown, MainApp app) {
         this.app = app;
-        this.ID = ID;
+        this.ID = countdown.getID();
+        this.countdown = countdown;
+        this.countdowns = app.getCds();
 
-        Countdown cd = cds.getCountdown(ID);
+        setup();
+    }
 
-        String name = cd.getName();
-        String date = cd.getDate2String();
+    public void setup() {
+
+        String name = countdown.getName();
+        String date = countdown.getDate2String();
 
         name_label.setText(name);
         date_label.setText(date);
 
-        FontIcon closeIcon = FontIcon.of(Feather.FTH_TRASH_2);
-        close_button.setIcon(closeIcon);
-        FontIcon editIcon = FontIcon.of(Feather.FTH_EDIT_3);
-        edit_button.setIcon(editIcon);
-
-
         //show_panel.setPreferredSize(new Dimension((int) (app.getWidth()*0.8), (int) ((app.getHeight())*0.2)));
         show_panel.setMinimumSize(new Dimension(Integer.MIN_VALUE, 100));
         show_panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
-        //app.add(show_panel);
 
-        //CountdownTimer timer = new CountdownTimer(cd, ShowPanel.this);
+        timer = new CountdownTimer(countdown, this);
+        timer.start();
 
 
-
+        close_button.setIcon(FontIcon.of(Feather.FTH_TRASH_2, 20, Color.LIGHT_GRAY));
         close_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Container parent = show_panel.getParent();
+                JPanel parent = app.getShow_panel();
+                //Container parent = show_panel.getParent();
                 if (parent != null) {
                     parent.remove(show_panel);
                     parent.revalidate();
                     parent.repaint();
 
-                    cds.removeCountdown(ID);
-                    cds.save();
+                    countdowns.removeCountdown(ID);
+                    countdowns.save();
 
-                    CountdownTimer timer = cd.getTimer();
                     timer.stop();
 
 
@@ -66,23 +71,23 @@ public class ShowPanel {
             }
         });
 
+        edit_button.setIcon(FontIcon.of(Feather.FTH_EDIT_3, 20, Color.LIGHT_GRAY));
         edit_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //String name = name_label.getText();
                 //String date = date_label.getText();
 
-                CountdownTimer timer = cd.getTimer();
                 timer.stop();
 
-                name_label.setText(cd.getName());
-                date_label.setText(cd.getDate2String());
+                name_label.setText(countdown.getName());
+                date_label.setText(countdown.getDate2String());
 
                 JTextField name_textfield = app.getName_textfield();
-                name_textfield.setText(cd.getName());
+                name_textfield.setText(countdown.getName());
 
                 JTextField date_textfield = app.getDate_textfield();
-                date_textfield.setText(cd.getDate2String());
+                date_textfield.setText(countdown.getDate2String());
 
                 JButton ekleButton = app.getEkleButton();
                 ekleButton.setIcon(FontIcon.of(Feather.FTH_EDIT));
@@ -94,12 +99,12 @@ public class ShowPanel {
 
     }
 
-    public JPanel getPanel() {
-        return show_panel;
-    }
-
     public MainApp getApp() {
         return app;
+    }
+
+    public JPanel getPanel() {
+        return show_panel;
     }
 
     public JLabel getName_label() {
@@ -112,5 +117,13 @@ public class ShowPanel {
 
     public int getID() {
         return ID;
+    }
+
+    public CountdownDatabase getCountdowns() {
+        return countdowns;
+    }
+
+    public CountdownTimer getTimer() {
+        return timer;
     }
 }

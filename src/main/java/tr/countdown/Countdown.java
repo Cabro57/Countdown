@@ -6,23 +6,19 @@ import java.time.format.DateTimeFormatter;
 public class Countdown {
     private int ID;
     private String name;
-    private String date;
-    private CountdownTimer timer;
+    private LocalDateTime date;
 
-    public Countdown(int ID, String name, String date) {
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+    public Countdown(int ID, String name, LocalDateTime date) {
         this.ID = ID;
-        this.name = name;
-        this.date = date;
-    }
-
-    public Countdown(String name, String date) {
         this.name = name;
         this.date = date;
     }
 
     public Countdown(String name, LocalDateTime date) {
         this.name = name;
-        this.date = date.toString();
+        this.date = date;
     }
 
     public int getID() {
@@ -42,28 +38,15 @@ public class Countdown {
     }
 
     public String getDate2String() {
-        return date;
+        return date.format(formatter);
     }
 
     public LocalDateTime getDate() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        LocalDateTime ddate = LocalDateTime.parse(date, formatter);
-        return ddate;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
+        return date;
     }
 
     public void setDate(LocalDateTime date) {
-        this.date = date.toString();
+        this.date = date;
     }
 
-    public CountdownTimer getTimer() {
-        return timer;
-    }
-
-    public void setTimer(CountdownTimer timer) {
-        this.timer = timer;
-    }
 }

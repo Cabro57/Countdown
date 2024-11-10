@@ -1,14 +1,20 @@
 package tr.countdown;
 
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class Countdowns {
+public class CountdownDatabase {
     private String filePath;
     private ArrayList<Countdown> countdowns;
 
-    public Countdowns(String dosya_adi) {
+    private int ID;
+
+    public CountdownDatabase(String dosya_adi) {
         this.countdowns = new ArrayList<>();
+
+        this.ID = 0;
 
         this.filePath = System.getProperty("user.home") + "\\AppData\\Roaming\\.countdown\\" + dosya_adi;
         File file = new File(filePath);
@@ -38,30 +44,25 @@ public class Countdowns {
         return null;
     }
 
-    public void addCountdown(Countdown countdown) {
-        int newID = 0;
-
-        while (true) {
-            int finalnewID = newID;
-
-            if (!countdowns.stream().anyMatch(c -> c.getID() == finalnewID)) {
-                break;
-            }
-            else {
-                newID++;
-            }
+    public int getSafeID() {
+        while (countdowns.stream().anyMatch(c -> c.getID() == ID)) {
+            ID++;
         }
+        return ID;
+    }
 
-        countdown.setID(newID);
+    public void addCountdown(Countdown countdown) {
+
         countdowns.add(countdown);
     }
 
     public void removeCountdown(int id) {
-        countdowns.removeIf(countdown -> countdown.getID() == id);
 
+        countdowns.removeIf(countdown -> countdown.getID() == id);
     }
 
-    public void updateCountdown(int id, String newName, String newDate) {
+    public void updateCountdown(int id, String newName, LocalDateTime newDate) {
+
         Countdown countdown = getCountdown(id);
         countdown.setName(newName);
         countdown.setDate(newDate);
@@ -76,7 +77,9 @@ public class Countdowns {
 
                 int id = Integer.parseInt(veriler[0].trim());
                 String name = veriler[1].trim();
-                String date = veriler[2].trim();
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+                LocalDateTime date = LocalDateTime.parse(veriler[2].trim(), formatter);
 
                 Countdown countdown = new Countdown(id, name, date);
                 countdowns.add(countdown);
